@@ -84,7 +84,7 @@ copyFile2Container(){
             docker cp ${scriptHomePath}/send_notify.js ${dk}:/scripts/
             docker cp ${scriptHomePath}/commands/doSendNotify.js ${dk}:/scripts/docker/
             docker cp ${scriptHomePath}/dockers.list ${dk}:/scripts/logs/
-            docker cp ${scriptHomePath}/cookies.list.* ${dk}:/scripts/logs/
+            docker cp ${scriptHomePath}/cookies.list.${dk} ${dk}:/scripts/logs/
             exit 0
         )&
     done
