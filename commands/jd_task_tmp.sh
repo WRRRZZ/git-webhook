@@ -5,13 +5,13 @@ cloneRepo(){
     repoName=$1
     repoUrl=$2
     branchName=$3
-    urlStatus="200"
-    if [[ "$urlStatus" != "200" ]];then
-        # 待处理
-        echo "${repoUrl} is OFF"
-        cd /scripts/docker
-        node doSendNotify.js "⚠️Docker仓库更新通知" "[${urlStatus}]【${repoName}】仓库作者跑路啦！"
-    else
+#    urlStatus="200"
+#    if [[ "$urlStatus" != "200" ]];then
+#        # 待处理
+#        echo "${repoUrl} is OFF"
+#        cd /scripts/docker
+#        node doSendNotify.js "⚠️Docker仓库更新通知" "[${urlStatus}]【${repoName}】仓库作者跑路啦！"
+#    else
         if [[ ! -d "/${repoName}/" ]]; then
             echo "未检查到${repoName}仓库脚本，初始化下载相关脚本..."
             git clone ${repoUrl} /${repoName}
@@ -21,7 +21,7 @@ cloneRepo(){
             git -C "/${repoName}" reset --hard origin/${branchName}
             git -C "/${repoName}" pull origin ${branchName} --rebase
         fi
-    fi
+#    fi
 }
 ## 以下修改定时任务
 ## 以下修改定时任务
