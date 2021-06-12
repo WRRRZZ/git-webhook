@@ -1,0 +1,25 @@
+{
+  "name": "git-webhook",
+  "script": "./index.js",
+  "cwd": "./",
+  "watch": [
+    "index.js"
+  ],
+  "ignore_watch": [
+    "cookies.list.*",
+    "*.lock",
+    "*.json",
+    ".git",
+    "node_modules",
+    "dockers.list",
+    "logs"
+  ],
+  "watch_options": {
+    "followSymlinks": false
+  },
+  "error_file": "./logs/index-err.log",
+  "out_file": "./logs/index-out.log",
+  "env": {
+    "NODE_ENV": "production"
+  }
+}

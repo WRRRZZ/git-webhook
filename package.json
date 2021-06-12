@@ -1,0 +1,15 @@
+{
+  "name": "git-webhook",
+  "version": "1.0.0",
+  "description": "Receive Webhook requests",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "lowking",
+  "license": "ISC",
+  "dependencies": {
+    "git-webhook-handler": "git+https://github.com/Rem486/git-webhook-handler.git",
+    "got": "^11.5.1"
+  }
+}

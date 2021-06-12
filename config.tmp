@@ -1,0 +1,5 @@
+module.exports = {
+  "secret": "你自己生成的随机字符串，相当于密码，用于后面配置web-hook",
+  "web-hook-port": 6666,
+  "workflow-port": 6667
+}

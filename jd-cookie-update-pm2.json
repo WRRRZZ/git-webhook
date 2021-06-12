@@ -1,0 +1,25 @@
+{
+  "name": "jd-cookie-update",
+  "script": "./jdCookieUpdate.js",
+  "cwd": "./",
+  "watch": [
+    "jdCookieUpdate.js"
+  ],
+  "ignore_watch": [
+    "cookies.list.*",
+    "*.lock",
+    "*.json",
+    ".git",
+    "node_modules",
+    "dockers.list",
+    "logs"
+  ],
+  "watch_options": {
+    "followSymlinks": false
+  },
+  "error_file": "./logs/jd-cookie-update-err.log",
+  "out_file": "./logs/jd-cookie-update-out.log",
+  "env": {
+    "NODE_ENV": "production"
+  }
+}

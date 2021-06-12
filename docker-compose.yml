@@ -1,0 +1,160 @@
+version: '3.6'
+services:
+  jd:
+    image: lxk0301/jd_scripts
+    # 配置服务器资源约束。此例子中服务被限制为使用内存不超过200M以及cpu不超过0.2（单核的20%）
+    # 经过实际测试，建议不低于200M
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '0.2'
+    #       memory: 200M
+    container_name: jd
+    restart: always
+    volumes:
+      - /home/lowking/jd_docker/docker/logs:/scripts/logs
+    tty: true
+    # 因为更换仓库地址可能git pull的dns解析不到，可以在配置追加hosts
+    extra_hosts:
+      - "gitee.com:180.97.125.228"
+      - "github.com:140.82.112.3"
+      # - "github.com:13.229.188.59"
+      - "raw.githubusercontent.com:185.199.111.133"
+    environment:
+      #传入容器名称，用于更新cookie时各个容器知道读取对应的文件，和上面的container_name保持一致
+      - CNAME=jd
+      #不运行crazyJoy挂机
+      - CRZAY_JOY_COIN_ENABLE=N
+      #球队赢好礼，加购物车任务
+      - PURCHASE_SHOPS=true
+      #特仑苏兑换奖品配置
+      - PASTURE_EXCHANGE_KEYWORD=10京豆
+      - CUSTOM_SHELL_FILE=https://gist.githubusercontent.com/lowking/5375d4596a302d0155b2174140b0f7e8/raw/jd_task.sh
+      #不执行的脚本      
+      - DO_NOT_RUN_SCRIPTS=
+      #多账号自动互助
+      - ENABLE_AUTO_HELP=true
+      #脚本更新仓库地址，配置了会切换到对应的地址
+      - REPO_URL=git@gitee.com:lxk0301/jd_scripts.git
+      # 注意环境变量填写值的时候一律不需要引号（""或者''）下面这些只是事例，根据自己的需求增加删除
+      #jd cookies
+      # 例: JD_COOKIE=pt_key=XXX;pt_pin=XXX
+      - JD_COOKIE=
+      #微信server酱通
+      - PUSH_KEY=
+      #Bark App通知
+      - BARK_PUSH=
+      #telegram机器人通知
+      - TG_BOT_TOKEN=
+      - TG_USER_ID=
+      - TG_PROXY_HOST=
+      - TG_PROXY_PROT=
+      #钉钉机器人通知
+      - DD_BOT_TOKEN=
+      - DD_BOT_SECRET=
+      #企业微信机器人通知
+      - QYWX_KEY=
+      #京东种豆得豆
+      - PLANT_BEAN_SHARECODES=
+      #京东农场
+      # 例: FRUITSHARECODES=京东农场的互助码
+      - FRUITSHARECODES=
+      #京东萌宠
+      # 例: PETSHARECODES=东东萌宠的互助码
+      - PETSHARECODES=
+      # 宠汪汪的喂食数量
+      - JOY_FEED_COUNT=
+      #东东超市
+      # - SUPERMARKET_SHARECODES=
+      #兑换多少数量的京豆（20，或者1000京豆,或者其他奖品的文字）
+      # 例: MARKET_COIN_TO_BEANS=1000
+      - MARKET_COIN_TO_BEANS=
+      #是否开启debug模式打印日志
+      # 例: JD_DEBUG=false
+      - JD_DEBUG=
+
+      #如果设置了 RANDOM_DELAY_MAX ，则会启用随机延迟功能，延迟随机 0 到 RANDOM_DELAY_MAX-1 秒。如果不设置此项，则不使用延迟。
+      #并不是所有的脚本都会被启用延迟，因为有一些脚本需要整点触发。延迟的目的有两个，1是降低抢占cpu资源几率，2是降低检查风险（主要是1）
+      #填写数字，单位为秒，比如写为 RANDOM_DELAY_MAX=30  就是随机产生0到29之间的一个秒数，执行延迟的意思。
+      - RANDOM_DELAY_MAX=30
+
+  jd1:
+    #image: jd
+    image: lxk0301/jd_scripts
+    # 配置服务器资源约束。此例子中服务被限制为使用内存不超过200M以及cpu不超过0.2（单核的20%）
+    # 经过实际测试，建议不低于200M
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '0.2'
+    #       memory: 200M
+    container_name: jd1
+    restart: always
+    volumes:
+      - /home/lowking/jd_docker/docker/logs:/scripts/logs
+    tty: true
+    # 因为更换仓库地址可能git pull的dns解析不到，可以在配置追加hosts
+    extra_hosts:
+      - "gitee.com:180.97.125.228"
+      - "github.com:140.82.112.3"
+      # - "github.com:13.229.188.59"
+      - "raw.githubusercontent.com:185.199.111.133"
+    environment:
+      #传入容器名称，用于更新cookie时各个容器知道读取对应的文件，和上面的container_name保持一致
+      - CNAME=jd1
+      #不运行crazyJoy挂机
+      - CRZAY_JOY_COIN_ENABLE=N
+      #球队赢好礼，加购物车任务
+      - PURCHASE_SHOPS=true
+      #特仑苏兑换奖品配置
+      - PASTURE_EXCHANGE_KEYWORD=10京豆
+      - CUSTOM_SHELL_FILE=https://gist.githubusercontent.com/lowking/5375d4596a302d0155b2174140b0f7e8/raw/jd_task.sh
+      #不执行的脚本
+      - DO_NOT_RUN_SCRIPTS=
+      #多账号自动互助
+      - ENABLE_AUTO_HELP=true
+      #脚本更新仓库地址，配置了会切换到对应的地址
+      - REPO_URL=git@gitee.com:lxk0301/jd_scripts.git
+      # 注意环境变量填写值的时候一律不需要引号（""或者''）下面这些只是事例，根据自己的需求增加删除
+      #jd cookies
+      # 例: JD_COOKIE=pt_key=XXX;pt_pin=XXX
+      - JD_COOKIE=
+      #微信server酱通
+      - PUSH_KEY=
+      #Bark App通知
+      - BARK_PUSH=
+      #telegram机器人通知
+      - TG_BOT_TOKEN=
+      - TG_USER_ID=
+      - TG_PROXY_HOST=
+      - TG_PROXY_PROT=
+      #钉钉机器人通知
+      - DD_BOT_TOKEN=
+      - DD_BOT_SECRET=
+      #企业微信机器人通知
+      - QYWX_KEY=
+      #京东种豆得豆
+      - PLANT_BEAN_SHARECODES=
+      #京东农场
+      # 例: FRUITSHARECODES=京东农场的互助码
+      - FRUITSHARECODES=
+      #京东萌宠
+      # 例: PETSHARECODES=东东萌宠的互助码
+      - PETSHARECODES=
+      # 宠汪汪的喂食数量
+      - JOY_FEED_COUNT=
+      #东东超市
+      # - SUPERMARKET_SHARECODES=
+      #兑换多少数量的京豆（20，或者1000京豆,或者其他奖品的文字）
+      # 例: MARKET_COIN_TO_BEANS=1000
+      - MARKET_COIN_TO_BEANS=
+      #是否开启debug模式打印日志
+      # 例: JD_DEBUG=false
+      - JD_DEBUG=
+
+      #如果设置了 RANDOM_DELAY_MAX ，则会启用随机延迟功能，延迟随机 0 到 RANDOM_DELAY_MAX-1 秒。如果不设置此项，则不使用延迟。
+      #并不是所有的脚本都会被启用延迟，因为有一些脚本需要整点触发。延迟的目的有两个，1是降低抢占cpu资源几率，2是降低检查风险（主要是1）
+      #填写数字，单位为秒，比如写为 RANDOM_DELAY_MAX=30  就是随机产生0到29之间的一个秒数，执行延迟的意思。
+      - RANDOM_DELAY_MAX=30
+
+# version 1
