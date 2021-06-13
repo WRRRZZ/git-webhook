@@ -82,6 +82,7 @@ copyFile2Container(){
             docker cp ${scriptHomePath}/commands/auto_help_temp.sh ${dk}:/scripts/docker/
             docker cp ${scriptHomePath}/commands/jd_task.sh ${dk}:/scripts/docker/
             docker cp ${scriptHomePath}/send_notify.js ${dk}:/scripts/
+            docker cp ${scriptHomePath}/send_notify.js ${dk}:/scripts/sendNotify.js
             docker cp ${scriptHomePath}/commands/doSendNotify.js ${dk}:/scripts/docker/
             docker cp ${scriptHomePath}/dockers.list ${dk}:/scripts/logs/
             docker cp ${scriptHomePath}/cookies.list.${dk} ${dk}:/scripts/logs/
