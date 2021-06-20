@@ -40,9 +40,8 @@ doContainerRestart(){
             then
                 echo "不通知"
             else
-                qywxKey=`docker exec ${dk} /bin/sh -c 'echo $QYWX_KEY'`
-                echo "【${dk}】通知开始key【${qywxKey}】"
-                export QYWX_KEY=${qywxKey} && node $HOME/git-webhook/commands/doSendNotify.js "⚠️Docker容器重启通知" "脚本自动更新，容器重启完毕🎉""${content}"
+                echo "【${dk}】通知开始"
+                ./commands/notify.sh ${dk} "⚠️Docker容器重启通知" "脚本自动更新，容器重启完毕🎉""${content}"
             fi
             exit 0
         )&
@@ -64,9 +63,8 @@ doContainerUpdate(){
             then
                 echo "不通知"
             else
-                qywxKey=`docker exec ${dk} /bin/sh -c 'echo $QYWX_KEY'`
-                echo "【${dk}】通知开始key【${qywxKey}】"
-                export QYWX_KEY=${qywxKey} && node $HOME/git-webhook/commands/doSendNotify.js "⚠️Docker容器更新通知" "脚本自动更新完毕🎉""${content}"
+                echo "【${dk}】通知开始"
+                ./commands/notify.sh ${dk} "⚠️Docker容器更新通知" "脚本自动更新完毕🎉""${content}"
                 echo "【${dk}】发送通知完毕"
             fi
             exit 0
