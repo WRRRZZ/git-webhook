@@ -19,7 +19,7 @@ doExecScript(){
             echo "容器【${dkk}】开始执行脚本"
             qywxKey=`docker exec ${dkk} /bin/sh -c 'echo $QYWX_KEY'`
             echo "【${dkk}】通知开始key【${qywxKey}】"
-            export QYWX_KEY=${qywxKey} && node $HOME/git-webhook/commands/doSendNotify.js "⚠️手动执行脚本通知" "执行脚本【${scriptName}.js】"
+            ./notify.sh ${dkk} "⚠️手动执行脚本通知" "执行脚本【${scriptName}.js】"
             echo "【${dkk}】发送通知完毕"
             (
                 JD_COOKIE=$(cat ${cookieFile} | grep -v "#" | paste -s -d '&')
@@ -32,7 +32,7 @@ doExecScript(){
                 echo "容器【${dkk}】开始执行脚本"
                 qywxKey=`docker exec ${dkk} /bin/sh -c 'echo $QYWX_KEY'`
                 echo "【${dkk}】通知开始key【${qywxKey}】"
-                export QYWX_KEY=${qywxKey} && node $HOME/git-webhook/commands/doSendNotify.js "⚠️手动执行脚本通知" "执行脚本【${scriptName}.js】"
+                ./notify.sh ${dkk} "⚠️手动执行脚本通知" "执行脚本【${scriptName}.js】"
                 echo "【${dkk}】发送通知完毕"
                 (
                     JD_COOKIE=$(cat ${cookieFile} | grep -v "#" | paste -s -d '&')
