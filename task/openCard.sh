@@ -8,6 +8,17 @@ do
     dockers[${#dockers[*]}]=${line}
     echo ${line}
 done<${scriptHomePath}/dockers.list
+
+execOpenCard(){
+    dkk=$1
+    # 获取容器的ck
+    cookieFile="$scriptHomePath/cookies.list.${dkk}"
+    JD_COOKIE=$(cat ${cookieFile} | grep -v "#" | paste -s -d '&')
+    # 获取容器的通知配置
+    qywxAm=`docker exec ${dkk} /bin/sh -c 'echo $QYWX_AM'`
+    export QYWX_AM=${qywxAm} && export JD_COOKIE=${JD_COOKIE} && python3 ${openCardPyPath} > ${scriptHomePath}/logs/opencard-${dkk}.log
+}
+
 for dkk in ${dockers[@]};
 do
     if [[ -n "${targetDk}" ]]
@@ -15,16 +26,12 @@ do
         if [[ ${targetDk} == ${dkk} ]]
         then
             (
-                cookieFile="$scriptHomePath/cookies.list.${dkk}"
-                JD_COOKIE=$(cat ${cookieFile} | grep -v "#" | paste -s -d '&')
-                export JD_COOKIE=${JD_COOKIE} && python3 ${openCardPyPath} > ${scriptHomePath}/logs/opencard-${dkk}.log
+                execOpenCard ${dkk}
             )&
         fi
     else
         (
-            cookieFile="$scriptHomePath/cookies.list.${dkk}"
-            JD_COOKIE=$(cat ${cookieFile} | grep -v "#" | paste -s -d '&')
-            export JD_COOKIE=${JD_COOKIE} && python3 ${openCardPyPath} > ${scriptHomePath}/logs/opencard-${dkk}.log
+            execOpenCard ${dkk}
         )&
     fi
 done
