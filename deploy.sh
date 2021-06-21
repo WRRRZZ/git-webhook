@@ -38,7 +38,6 @@ doContainerRestart(){
     else
         docker-compose -f $HOME/jd/docker-compose.yml up -d --force-recreate ${targetDk}
     fi
-    echo "准备发送通知"
     copyFile2Container
     sleep 30s
     doContainerUpdate
