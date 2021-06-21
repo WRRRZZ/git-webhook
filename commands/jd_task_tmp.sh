@@ -15,6 +15,7 @@ cloneRepo(){
         if [[ ! -d "/${repoName}/" ]]; then
             echo "未检查到${repoName}仓库脚本，初始化下载相关脚本..."
             git clone ${repoUrl} /${repoName}
+            git -C "/${repoName}" checkout ${branchName}
         else
             echo "更新monk-coder脚本相关文件..."
             git -C "/${repoName}" fetch --all
