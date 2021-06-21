@@ -7,7 +7,7 @@ while read line;
 do
     dockers[${#dockers[*]}]=${line}
     echo ${line}
-done<../dockers.list
+done<${scriptHomePath}/dockers.list
 for dkk in ${dockers[@]};
 do
     if [[ -n "${targetDk}" ]]
