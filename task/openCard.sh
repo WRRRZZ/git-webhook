@@ -17,14 +17,14 @@ do
             (
                 cookieFile="$scriptHomePath/cookies.list.${dkk}"
                 JD_COOKIE=$(cat ${cookieFile} | grep -v "#" | paste -s -d '&')
-                export JD_COOKIE=${JD_COOKIE} && python3 openCardPyPath > ${scriptHomePath}/logs/opencard-${dkk}.log
+                export JD_COOKIE=${JD_COOKIE} && python3 ${openCardPyPath} > ${scriptHomePath}/logs/opencard-${dkk}.log
             )&
         fi
     else
         (
             cookieFile="$scriptHomePath/cookies.list.${dkk}"
             JD_COOKIE=$(cat ${cookieFile} | grep -v "#" | paste -s -d '&')
-            export JD_COOKIE=${JD_COOKIE} && python3 openCardPyPath > ${scriptHomePath}/logs/opencard-${dkk}.log
+            export JD_COOKIE=${JD_COOKIE} && python3 ${openCardPyPath} > ${scriptHomePath}/logs/opencard-${dkk}.log
         )&
     fi
 done
