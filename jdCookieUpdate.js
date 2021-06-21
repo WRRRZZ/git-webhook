@@ -61,7 +61,7 @@ server.on('request', function (req, res) {
                             } else {
                                 content = info[1]
                             }
-                            runCommand('bash', [scriptHomePath + '/deploy.sh', dk, operation, content, ' |ts ', ' >> ', ` ${scriptHomePath}/logs/deploy.log `], function (txt) {
+                            runCommand('bash', [scriptHomePath + '/deploy.sh', operation, dk, content, ' |ts ', ' >> ', ` ${scriptHomePath}/logs/deploy.log `], function (txt) {
                                 console.log(txt)
                             })
                         }
