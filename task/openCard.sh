@@ -16,7 +16,7 @@ execOpenCard(){
     JD_COOKIE=$(cat ${cookieFile} | grep -v "#" | paste -s -d '&')
     # 获取容器的通知配置
     qywxAm=`docker exec ${dkk} /bin/sh -c 'echo $QYWX_AM'`
-    export QYWX_AM=${qywxAm} && export JD_COOKIE=${JD_COOKIE} && python3 ${openCardPyPath} > ${scriptHomePath}/logs/opencard-${dkk}.log
+    export QYWX_AM=${qywxAm} && export JD_COOKIE=${JD_COOKIE} && python3 ${openCardPyPath} |ts > ${scriptHomePath}/logs/opencard-${dkk}.log
 }
 
 LOCK_NAME="./openCard.lock"
