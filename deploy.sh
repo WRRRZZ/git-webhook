@@ -58,7 +58,7 @@ doContainerUpdate(){
                     echo "不通知"
                 else
                     echo "【${dk}】通知开始"
-                    ./commands/notify.sh ${dk} "⚠️Docker容器更新通知" "脚本自动更新完毕🎉""${content}"
+                    bash ${scriptHomePath}/commands/notify.sh ${dk} "⚠️Docker容器更新通知" "脚本自动更新完毕🎉""${content}"
                     echo "【${dk}】发送通知完毕"
                 fi
                 exit 0
@@ -74,7 +74,7 @@ doContainerUpdate(){
                         echo "不通知"
                     else
                         echo "【${dk}】通知开始"
-                        ./commands/notify.sh ${dk} "⚠️Docker容器更新通知" "脚本自动更新完毕🎉""${content}"
+                        bash ${scriptHomePath}/commands/notify.sh ${dk} "⚠️Docker容器更新通知" "脚本自动更新完毕🎉""${content}"
                         echo "【${dk}】发送通知完毕"
                     fi
                     exit 0
