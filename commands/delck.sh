@@ -83,10 +83,10 @@ doDelck(){
     echo -e "${newcks}" > ${scriptHomePath}/cookies.list.${targetDk}
     docker cp ${scriptHomePath}/cookies.list.${targetDk} ${targetDk}:/scripts/logs/
     echo "██删除ck完成"
-    ./notify.sh ${targetDk} "⚠️京东Cookie更新通知" "已从【${targetDk}】容器删除【${ckname}】Cookie🎉"
+    sh ${scriptHomePath}/commands/notify.sh ${targetDk} "⚠️京东Cookie更新通知" "已从【${targetDk}】容器删除【${ckname}】Cookie🎉"
     if [[ "$targetDk" != "jd" ]]
     then
-        ./notify.sh jd "⚠️京东Cookie更新通知" "【${ckname}】Cookie已更新/添加到【${targetDk}】容器🎉"
+        sh ${scriptHomePath}/commands/notify.sh jd "⚠️京东Cookie更新通知" "【${ckname}】Cookie已更新/添加到【${targetDk}】容器🎉"
     fi
 }
 

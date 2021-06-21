@@ -104,10 +104,10 @@ doUpdateck(){
     echo -e "${newcks}" > ${scriptHomePath}/cookies.list.${targetDk}
     docker cp ${scriptHomePath}/cookies.list.${targetDk} ${targetDk}:/scripts/logs/
     echo "██更新ck完成"
-    ./notify.sh ${targetDk} "⚠️京东Cookie更新通知" "【${ckname}】@wshh@[${newCk:index:10}]Cookie已更新/添加到【${targetDk}】容器🎉"
+    sh ${scriptHomePath}/commands/notify.sh ${targetDk} "⚠️京东Cookie更新通知" "【${ckname}】@wshh@[${newCk:index:10}]Cookie已更新/添加到【${targetDk}】容器🎉"
     if [[ "$targetDk" != "jd" ]]
     then
-        ./notify.sh jd "⚠️京东Cookie更新通知" "【${ckname}】@wshh@[${newCk:index:10}]Cookie已更新/添加到【${targetDk}】容器🎉"
+        sh ${scriptHomePath}/commands/notify.sh jd "⚠️京东Cookie更新通知" "【${ckname}】@wshh@[${newCk:index:10}]Cookie已更新/添加到【${targetDk}】容器🎉"
     fi
 
 }
