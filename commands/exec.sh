@@ -13,7 +13,7 @@ doExecScript(){
     for dkk in ${dockers[@]};
     do
 
-        cookieFile="$HOME/git-webhook/cookies.list.${dkk}"
+        cookieFile="$scriptHomePath/cookies.list.${dkk}"
         echo "cookie文件路径：${cookieFile}"
         if [[ "${dk}" == "all" ]]
         then
