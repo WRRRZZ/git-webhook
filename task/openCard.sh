@@ -19,19 +19,36 @@ execOpenCard(){
     export QYWX_AM=${qywxAm} && export JD_COOKIE=${JD_COOKIE} && python3 ${openCardPyPath} > ${scriptHomePath}/logs/opencard-${dkk}.log
 }
 
-for dkk in ${dockers[@]};
-do
-    if [[ -n "${targetDk}" ]]
-    then
-        if [[ ${targetDk} == ${dkk} ]]
+LOCK_NAME="./openCard.lock"
+if ( set -o noclobber; echo "$$" > "$LOCK_NAME") 2> /dev/null;
+then
+    trap 'rm -f "$LOCK_NAME"; exit $?' INT TERM EXIT
+
+    ### 开始正常流程
+    for dkk in ${dockers[@]};
+    do
+        if [[ -n "${targetDk}" ]]
         then
+            if [[ ${targetDk} == ${dkk} ]]
+            then
+                (
+                    execOpenCard ${dkk}
+                )&
+            fi
+        else
             (
                 execOpenCard ${dkk}
             )&
         fi
-    else
-        (
-            execOpenCard ${dkk}
-        )&
-    fi
-done
+    done
+    ### 正常流程结束
+
+    ### Removing lock
+    rm -f ${LOCK_NAME}
+    trap - INT TERM EXIT
+else
+    echo "Failed to acquire lockfile: $LOCK_NAME."
+    echo "Held by $(cat ${LOCK_NAME})"
+    rm -f ${LOCK_NAME}
+    exit 1
+fi
