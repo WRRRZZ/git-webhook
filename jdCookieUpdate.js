@@ -53,8 +53,15 @@ server.on('request', function (req, res) {
                         } else if (command === "deploy") {
                             // jd@update xxxx.js
                             let dk = info[0]
-                            let content = info[1]
-                            runCommand('bash', [scriptHomePath + '/deploy.sh', dk, content, ' |ts ', ' >> ', ` ${scriptHomePath}/logs/deploy.log `], function (txt) {
+                            let operation = ""
+                            let content = ""
+                            if (info.length > 2) {
+                                operation = "restart"
+                                content = info[2]
+                            } else {
+                                content = info[1]
+                            }
+                            runCommand('bash', [scriptHomePath + '/deploy.sh', dk, operation, content, ' |ts ', ' >> ', ` ${scriptHomePath}/logs/deploy.log `], function (txt) {
                                 console.log(txt)
                             })
                         }
