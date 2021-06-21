@@ -77,19 +77,39 @@ doContainerUpdate(){
     echo "开始更新docker"
     for dk in ${dockers[@]};
     do
-        (
-            docker exec -t ${dk} /bin/sh -c "/usr/local/bin/docker_entrypoint.sh |ts >> /scripts/logs/default_task.log 2>&1"
+        if [[ "${targetDk}" == "all" ]]
+        then
+            (
+                docker exec -t ${dk} /bin/sh -c "/usr/local/bin/docker_entrypoint.sh |ts >> /scripts/logs/default_task.log 2>&1"
 
-            if [[ "${enable_notify}" == "0" ]]
+                if [[ "${enable_notify}" == "0" ]]
+                then
+                    echo "不通知"
+                else
+                    echo "【${dk}】通知开始"
+                    ./commands/notify.sh ${dk} "⚠️Docker容器更新通知" "脚本自动更新完毕🎉""${content}"
+                    echo "【${dk}】发送通知完毕"
+                fi
+                exit 0
+            )&
+        else
+            if [[ ${targetDk} == ${dk} ]]
             then
-                echo "不通知"
-            else
-                echo "【${dk}】通知开始"
-                ./commands/notify.sh ${dk} "⚠️Docker容器更新通知" "脚本自动更新完毕🎉""${content}"
-                echo "【${dk}】发送通知完毕"
+                (
+                    docker exec -t ${dk} /bin/sh -c "/usr/local/bin/docker_entrypoint.sh |ts >> /scripts/logs/default_task.log 2>&1"
+
+                    if [[ "${enable_notify}" == "0" ]]
+                    then
+                        echo "不通知"
+                    else
+                        echo "【${dk}】通知开始"
+                        ./commands/notify.sh ${dk} "⚠️Docker容器更新通知" "脚本自动更新完毕🎉""${content}"
+                        echo "【${dk}】发送通知完毕"
+                    fi
+                    exit 0
+                )&
             fi
-            exit 0
-        )&
+        fi
     done
     echo "更新docker完成"
 }
