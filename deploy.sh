@@ -4,13 +4,17 @@ enable_notify=$2
 OPERA_RESTART="restart"
 OPERA_UPDATE="update"
 scriptHomePath="$HOME/git-webhook"
+targetDk="jd"
 if [[ ${operation} == ${OPERA_RESTART} ]]
 then
-    content=$2
-    enable_notify=$3
+    targetDk=$2
+    content=$3
+    enable_notify=$4
 else
-    content=$1
+    targetDk=$1
+    content=$2
     operation=${OPERA_UPDATE}
+    enable_notify=$3
 fi
 if [[ -n "$content" ]] && [[ "$content" != "@" ]]
 then
@@ -28,23 +32,40 @@ done<./dockers.list
 
 doContainerRestart(){
     echo "开始重启docker"
-    docker-compose -f $HOME/jd/docker-compose.yml up -d --force-recreate
+    docker-compose -f $HOME/jd/docker-compose.yml up -d --force-recreate ${targetDk}
     echo "准备发送通知"
     copyFile2Container
     sleep 30s
     echo "开始发送通知"
     for dk in ${dockers[@]};
     do
-        (
-            if [[ "${enable_notify}" == "0" ]]
+        if [[ "${targetDk}" == "all" ]]
+        then
+            (
+                if [[ "${enable_notify}" == "0" ]]
+                then
+                    echo "不通知"
+                else
+                    echo "【${dk}】通知开始"
+                    ./commands/notify.sh ${dk} "⚠️Docker容器重启通知" "脚本自动更新，容器重启完毕🎉""${content}"
+                fi
+                exit 0
+            )&
+        else
+            if [[ ${targetDk} == ${dk} ]]
             then
-                echo "不通知"
-            else
-                echo "【${dk}】通知开始"
-                ./commands/notify.sh ${dk} "⚠️Docker容器重启通知" "脚本自动更新，容器重启完毕🎉""${content}"
+                (
+                    if [[ "${enable_notify}" == "0" ]]
+                    then
+                        echo "不通知"
+                    else
+                        echo "【${dk}】通知开始"
+                        ./commands/notify.sh ${dk} "⚠️Docker容器重启通知" "脚本自动更新，容器重启完毕🎉""${content}"
+                    fi
+                    exit 0
+                )&
             fi
-            exit 0
-        )&
+        fi
     done
     wait
     echo "发送通知完毕"
