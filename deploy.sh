@@ -39,7 +39,7 @@ doContainerRestart(){
         docker-compose -f $HOME/jd/docker-compose.yml up -d --force-recreate ${targetDk}
     fi
     copyFile2Container
-    sleep 30s
+    sleep 60s
     doContainerUpdate
     echo "重启docker完成"
 }
