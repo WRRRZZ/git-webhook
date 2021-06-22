@@ -526,8 +526,6 @@ function qywxamNotify(text, desp) {
             qywxSplitSend(text, despTmp[i], userIdsTmp[accIdx]);
           }
         }
-      } else {
-        qywxSplitSend(text, desp, userIdsTmp[0]);
       }
     }
   }
