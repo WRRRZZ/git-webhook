@@ -15,8 +15,7 @@ RUN set -ex \
     && sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
     && apk update \
     && apk upgrade \
-    && apk add --no-cache bash tzdata git moreutils curl jq openssh-client \
-    && apk add nodejs-current \
+    && apk add --no-cache bash tzdata git moreutils curl jq openssh-client nodejs-current \
     && rm -rf /var/cache/apk/* \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
@@ -24,6 +23,7 @@ RUN set -ex \
     && echo -e $KEY > /root/.ssh/id_rsa \
     && chmod 600 /root/.ssh/id_rsa \
     && ssh-keyscan gitee.com > /root/.ssh/known_hosts \
+    && ssh-keyscan gogs.mynetgear.com > /root/.ssh/known_hosts \
     && git clone -b $REPO_BRANCH $REPO_URL /scripts \
     && cd /scripts \
     && mkdir logs \
