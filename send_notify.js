@@ -507,7 +507,6 @@ function qywxamNotify(text, desp) {
   if (QYWX_AM) {
     const QYWX_AM_AY = QYWX_AM.split(",");
     const despTmp = desp.split("\n\n");
-    console.log(JSON.stringify(despTmp));
     const userIdsTmp = QYWX_AM_AY[2].split("|");
     const accIdxRE = /\d+/;
     let accIdx, userId;
@@ -524,7 +523,6 @@ function qywxamNotify(text, desp) {
           console.log("账户" + despTmp[i].match(accIdxRE)[0] + "配置企业微信通知ID为@N不通知，跳过。");
         } else {
           if (!!despTmp[i]) {
-            console.log(despTmp[i])
             qywxSplitSend(text, despTmp[i], userIdsTmp[accIdx]);
           }
         }
