@@ -18,8 +18,7 @@ doExecScript(){
         if [[ "${dk}" == "all" ]]
         then
             echo "容器【${dkk}】开始执行脚本"
-            qywxKey=`docker exec ${dkk} /bin/sh -c 'echo $QYWX_KEY'`
-            echo "【${dkk}】通知开始key【${qywxKey}】"
+            echo "【${dkk}】通知开始"
             bash ${scriptHomePath}/commands/notify.sh ${dkk} "⚠️手动执行脚本通知" "执行脚本【${scriptName}.js】"
             echo "【${dkk}】发送通知完毕"
             (
@@ -31,8 +30,7 @@ doExecScript(){
             if [[ ${dkk} == ${dk} ]]
             then
                 echo "容器【${dkk}】开始执行脚本"
-                qywxKey=`docker exec ${dkk} /bin/sh -c 'echo $QYWX_KEY'`
-                echo "【${dkk}】通知开始key【${qywxKey}】"
+                echo "【${dkk}】通知开始key"
                 bash ${scriptHomePath}/commands/notify.sh ${dkk} "⚠️手动执行脚本通知" "执行脚本【${scriptName}.js】"
                 echo "【${dkk}】发送通知完毕"
                 (
