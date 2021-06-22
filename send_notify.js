@@ -503,6 +503,13 @@ function ChangeUserId(desp) {
   }
 }
 
+function isBlank(str) {
+  str=str.replace(/\ +/g,"");
+  str=str.replace(/[ ]/g,"");
+  str=str.replace(/[\r\n]/g,"");
+  return !Boolean(str);
+}
+
 function qywxamNotify(text, desp) {
   if (QYWX_AM) {
     const QYWX_AM_AY = QYWX_AM.split(",");
@@ -526,6 +533,8 @@ function qywxamNotify(text, desp) {
             qywxSplitSend(text, despTmp[i], userIdsTmp[accIdx]);
           }
         }
+      } else if (!isBlank(despTmp[i])) {
+        qywxSplitSend(text, despTmp[i], userIdsTmp[0]);
       }
     }
   }
