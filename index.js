@@ -70,7 +70,7 @@ handler.on('push', function (event) {
             }
         }
         diff = getDiffStr(diffSet, diff)
-        runCommand('bash', [scriptHomePath + '/deploy.sh', diff, ' |ts ', ' >> ', ` ${scriptHomePath}/logs/deploy.log `], function (txt) {
+        runCommand('bash', [scriptHomePath + '/deploy.sh', 'all', diff, ' |ts ', ' >> ', ` ${scriptHomePath}/logs/deploy.log `], function (txt) {
             console.log(txt)
         })
     }
