@@ -1,15 +1,13 @@
+
 /*
- * @Author: lxk0301 https://gitee.com/lxk0301
- * @Date: 2020-08-19 16:12:40 
- * @Last Modified by: lxk0301
- * @Last Modified time: 2021-4-3 16:00:54
+ Last Modified time: 2021-4-3 16:00:54
  */
 /**
  * sendNotify 推送通知功能
  * @param text 通知头
  * @param desp 通知体
  * @param params 某些推送通知方式点击弹窗可跳转, 例：{ url: 'https://abc.com' }
- * @param author 作者仓库等信息  例：`本脚本免费使用 By：https://gitee.com/lxk0301/jd_docker`
+ * @param author 作者仓库等信息  例：`本脚本免费使用 By：xxx`
  * @returns {Promise<unknown>}
  */
 const querystring = require("querystring");
@@ -148,12 +146,11 @@ if (process.env.PUSH_PLUS_USER) {
  * @param text 通知头
  * @param desp 通知体
  * @param params 某些推送通知方式点击弹窗可跳转, 例：{ url: 'https://abc.com' }
- * @param author 作者仓库等信息  例：`本脚本免费使用 By：https://gitee.com/lxk0301/jd_docker`
+ * @param author 作者仓库等信息  例：`本脚本免费使用 By：xxxx`
  * @returns {Promise<unknown>}
  */
 async function sendNotify(text, desp, params = {}, author = '') {
   //提供6种通知
-  desp += author;//增加作者信息，防止被贩卖等
   await Promise.all([
     serverNotify(text, desp),//微信server酱
     pushPlusNotify(text, desp)//pushplus(推送加)
@@ -507,7 +504,46 @@ function ChangeUserId(desp) {
 }
 
 function qywxamNotify(text, desp) {
-  return new Promise(resolve => {
+  const QYWX_AM_AY = QYWX_AM.split(",");
+  const despTmp = desp.split("\n\n");
+  const userIdsTmp = QYWX_AM_AY[2].split("|");
+  const accIdxRE = /\d+/;
+  let accIdx, userId;
+  for (let i = 0; i < despTmp.length; i++) {
+    if (despTmp[i].match(accIdxRE)) {
+      accIdx = parseInt(despTmp[i].match(accIdxRE)[0]) - 1
+      userId = userIdsTmp[accIdx]
+      if (userIdsTmp.length === 1) {
+        accIdx = 0
+      }
+      if (typeof userId == "undefined") {
+        qywxSplitSend(text, despTmp[i], userIdsTmp[0])
+        continue
+      } else if (userId == "@N") {
+        console.log(
+            "账户" +
+            despTmp[i].match(accIdxRE)[0] +
+            "配置企业微信通知ID为@N不通知，跳过。"
+        )
+        continue
+      } else {
+        re = eval("/" + "账号" + "/ig")
+        if (despTmp[i].match(re).length > 1) {
+          console.log("通知消息分割不正常，取消企业微信拆分通知。")
+        } else if (despTmp[i].match(re).length == 1) {
+          qywxSplitSend(text, despTmp[i], userIdsTmp[accIdx])
+        } else {
+          continue
+        }
+      }
+    } else {
+      continue
+    }
+  }
+}
+
+function qywxSplitSend(text, desp, userId) {
+  return new Promise((resolve) => {
     if (QYWX_AM) {
       const QYWX_AM_AY = QYWX_AM.split(',');
       const options_accesstoken = {
@@ -522,7 +558,7 @@ function qywxamNotify(text, desp) {
         timeout
       };
       $.post(options_accesstoken, (err, resp, data) => {
-        html = desp.replace(/\n/g, "<br/>")
+        html = desp.replace(/\n/g, "<br/>");
         var json = JSON.parse(data);
         accesstoken = json.access_token;
         let options;
@@ -578,7 +614,7 @@ function qywxamNotify(text, desp) {
         options = {
           url: `https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=${accesstoken}`,
           json: {
-            touser: `${ChangeUserId(desp)}`,
+            touser: `${userId}`,
             agentid: `${QYWX_AM_AY[3]}`,
             safe: '0',
             ...options
@@ -591,12 +627,12 @@ function qywxamNotify(text, desp) {
         $.post(options, (err, resp, data) => {
           try {
             if (err) {
-              console.log('成员ID:' + ChangeUserId(desp) + '企业微信应用消息发送通知消息失败！！\n');
+              console.log('成员ID:' + userId + '企业微信应用消息发送通知消息失败！！\n');
               console.log(err);
             } else {
               data = JSON.parse(data);
               if (data.errcode === 0) {
-                console.log('成员ID:' + ChangeUserId(desp) + '企业微信应用消息发送通知消息成功🎉。\n');
+                console.log('成员ID:' + userId + '企业微信应用消息发送通知消息成功🎉。\n');
               } else {
                 console.log(`${data.errmsg}\n`);
               }
@@ -623,7 +659,7 @@ function iGotNotify(text, desp, params={}){
       if(!IGOT_PUSH_KEY_REGX.test(IGOT_PUSH_KEY)) {
         console.log('您所提供的IGOT_PUSH_KEY无效\n')
         resolve()
-        return 
+        return
       }
       const options = {
         url: `https://push.hellyw.com/${IGOT_PUSH_KEY.toLowerCase()}`,
