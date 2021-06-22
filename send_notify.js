@@ -512,32 +512,21 @@ function qywxamNotify(text, desp) {
   for (let i = 0; i < despTmp.length; i++) {
     if (despTmp[i].match(accIdxRE)) {
       accIdx = parseInt(despTmp[i].match(accIdxRE)[0]) - 1
-      userId = userIdsTmp[accIdx]
       if (userIdsTmp.length === 1) {
-        accIdx = 0
+        accIdx = 0;
       }
+      userId = userIdsTmp[accIdx];
       if (typeof userId == "undefined") {
-        qywxSplitSend(text, despTmp[i], userIdsTmp[0])
-        continue
-      } else if (userId == "@N") {
-        console.log(
-            "账户" +
-            despTmp[i].match(accIdxRE)[0] +
-            "配置企业微信通知ID为@N不通知，跳过。"
-        )
-        continue
+        qywxSplitSend(text, despTmp[i], userIdsTmp[0]);
+      } else if (userId === "@N") {
+        console.log("账户" + despTmp[i].match(accIdxRE)[0] + "配置企业微信通知ID为@N不通知，跳过。");
       } else {
-        re = eval("/" + "账号" + "/ig")
-        if (despTmp[i].match(re).length > 1) {
-          console.log("通知消息分割不正常，取消企业微信拆分通知。")
-        } else if (despTmp[i].match(re).length == 1) {
-          qywxSplitSend(text, despTmp[i], userIdsTmp[accIdx])
-        } else {
-          continue
+        if (!!despTmp[i]) {
+          qywxSplitSend(text, despTmp[i], userIdsTmp[accIdx]);
         }
       }
     } else {
-      continue
+      qywxSplitSend(text, desp, userIdsTmp[0]);
     }
   }
 }
