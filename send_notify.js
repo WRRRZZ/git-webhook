@@ -504,29 +504,33 @@ function ChangeUserId(desp) {
 }
 
 function qywxamNotify(text, desp) {
-  const QYWX_AM_AY = QYWX_AM.split(",");
-  const despTmp = desp.split("\n\n");
-  const userIdsTmp = QYWX_AM_AY[2].split("|");
-  const accIdxRE = /\d+/;
-  let accIdx, userId;
-  for (let i = 0; i < despTmp.length; i++) {
-    if (despTmp[i].match(accIdxRE)) {
-      accIdx = parseInt(despTmp[i].match(accIdxRE)[0]) - 1
-      if (userIdsTmp.length === 1) {
-        accIdx = 0;
-      }
-      userId = userIdsTmp[accIdx];
-      if (typeof userId == "undefined") {
-        qywxSplitSend(text, despTmp[i], userIdsTmp[0]);
-      } else if (userId === "@N") {
-        console.log("账户" + despTmp[i].match(accIdxRE)[0] + "配置企业微信通知ID为@N不通知，跳过。");
-      } else {
-        if (!!despTmp[i]) {
-          qywxSplitSend(text, despTmp[i], userIdsTmp[accIdx]);
+  if (QYWX_AM) {
+    const QYWX_AM_AY = QYWX_AM.split(",");
+    const despTmp = desp.split("\n\n");
+    console.log(JSON.stringify(despTmp));
+    const userIdsTmp = QYWX_AM_AY[2].split("|");
+    const accIdxRE = /\d+/;
+    let accIdx, userId;
+    for (let i = 0; i < despTmp.length; i++) {
+      if (despTmp[i].match(accIdxRE)) {
+        accIdx = parseInt(despTmp[i].match(accIdxRE)[0]) - 1
+        if (userIdsTmp.length === 1) {
+          accIdx = 0;
         }
+        userId = userIdsTmp[accIdx];
+        if (typeof userId == "undefined") {
+          qywxSplitSend(text, despTmp[i], userIdsTmp[0]);
+        } else if (userId === "@N") {
+          console.log("账户" + despTmp[i].match(accIdxRE)[0] + "配置企业微信通知ID为@N不通知，跳过。");
+        } else {
+          if (!!despTmp[i]) {
+            console.log(despTmp[i])
+            qywxSplitSend(text, despTmp[i], userIdsTmp[accIdx]);
+          }
+        }
+      } else {
+        qywxSplitSend(text, desp, userIdsTmp[0]);
       }
-    } else {
-      qywxSplitSend(text, desp, userIdsTmp[0]);
     }
   }
 }
