@@ -4,7 +4,17 @@ first=\$1
 cmd=\$*
 containerCookieList="\$COOKIES_LIST.\$CNAME"
 echo \${cmd/\$1/}
-if [ \$1 == "conc" ]; then
+if [ \$1 == "ca" ]; then
+    while read line;
+    do
+        containerCookieList="\$COOKIES_LIST.\$line"
+        for job in \$(cat \$containerCookieList | grep -v "#" | paste -s -d ' '); do
+            { export JD_COOKIE=\$job && node \${cmd/\$1/}
+            }&
+        done
+    done</scripts/logs/dockers.list
+elif [ \$1 == "conc" ]; then
+    containerCookieList="\$COOKIES_LIST.\$CNAME"
     for job in \$(cat \$containerCookieList | grep -v "#" | paste -s -d ' '); do
         { export JD_COOKIE=\$job && node \${cmd/\$1/}
         }&
