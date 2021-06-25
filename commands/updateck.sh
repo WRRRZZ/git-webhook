@@ -79,14 +79,20 @@ doUpdateck(){
     then
         echo -e "\n██更新ck到【${targetDk}】容器"
     else
-        #把原来的ck拿出来
-        targetDk="jd1"
-        for ck in $(cat ${scriptHomePath}/cookies.list.${targetDk} | grep -v "#" | paste -s -d ' '); do
-            newckarr[${#newckarr[*]}]=${ck}
+        #暂时不允许添加ck
+        echo -e "\n██暂时不允许添加ck"
+        for dk in ${dockers[@]};
+        do
+            bash ${scriptHomePath}/commands/notify.sh ${dk} "⚠️京东Cookie更新通知" "不允许添加新ck"
         done
-        #新ck添加到jd1中
-        echo -e "\n██添加ck"
-        newckarr[${#newckarr[*]}]=${newCk}
+        #把原来的ck拿出来
+#        targetDk="jd1"
+#        for ck in $(cat ${scriptHomePath}/cookies.list.${targetDk} | grep -v "#" | paste -s -d ' '); do
+#            newckarr[${#newckarr[*]}]=${ck}
+#        done
+#        #新ck添加到jd1中
+#        echo -e "\n██添加ck"
+#        newckarr[${#newckarr[*]}]=${newCk}
     fi
 
     for ckk in ${newckarr[@]};
