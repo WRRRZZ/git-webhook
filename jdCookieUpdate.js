@@ -68,7 +68,7 @@ server.on('request', function (req, res) {
                             // getCookieByCode 1340000
                             let telephone = info[0]
                             if ((telephone + '').length === 11) {
-                                runCommand('bash', [scriptHomePath + '/getCookieByCode.sh', telephone, ' |ts ', ' >> ', ` ${scriptHomePath}/logs/getCookieByCode.log `], function (txt) {
+                                runCommand('bash', [scriptHomePath + '/commands/getCookieByCode.sh', telephone, ' |ts ', ' >> ', ` ${scriptHomePath}/logs/getCookieByCode.log `], function (txt) {
                                     console.log(txt)
                                 })
                             }
@@ -78,8 +78,10 @@ server.on('request', function (req, res) {
                             if ((telephoneNcode + '').length === 17) {
                                 let telephone = telephoneNcode.substring(0, 11)
                                 let code = telephoneNcode.replace(telephone, '')
+                                console.log(telephone)
+                                console.log(code)
                                 if ((telephone + '').length === 11) {
-                                    runCommand('bash', [scriptHomePath + '/recCode.sh', telephone, code, ' |ts ', ' >> ', ` ${scriptHomePath}/logs/getCookieByCode.log `], function (txt) {
+                                    runCommand('bash', [scriptHomePath + '/commands/recCode.sh', telephone, code, ' |ts ', ' >> ', ` ${scriptHomePath}/logs/recCode.log `], function (txt) {
                                         console.log(txt)
                                     })
                                 }
