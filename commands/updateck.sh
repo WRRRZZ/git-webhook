@@ -85,6 +85,7 @@ doUpdateck(){
         do
             bash ${scriptHomePath}/commands/notify.sh ${dk} "⚠️京东Cookie更新通知" "不允许添加新ck"
         done
+        exit 1
         #把原来的ck拿出来
 #        targetDk="jd1"
 #        for ck in $(cat ${scriptHomePath}/cookies.list.${targetDk} | grep -v "#" | paste -s -d ' '); do
