@@ -1,4 +1,4 @@
-const commands = ['exec', 'delck', 'updateck', 'deploy']
+const commands = ['exec', 'delck', 'updateck', 'deploy', 'getCookieByCode', 'recCode']
 const scriptHomePath='$HOME/git-webhook'
 
 var config = require('./config')
@@ -64,6 +64,26 @@ server.on('request', function (req, res) {
                             runCommand('bash', [scriptHomePath + '/deploy.sh', operation, dk, content, ' |ts ', ' >> ', ` ${scriptHomePath}/logs/deploy.log `], function (txt) {
                                 console.log(txt)
                             })
+                        } else if (command === "getCookieByCode") {
+                            // getCookieByCode 1340000
+                            let telephone = info[0]
+                            if ((telephone + '').length === 11) {
+                                runCommand('bash', [scriptHomePath + '/getCookieByCode.sh', telephone, ' |ts ', ' >> ', ` ${scriptHomePath}/logs/getCookieByCode.log `], function (txt) {
+                                    console.log(txt)
+                                })
+                            }
+                        } else if (command === "recCode") {
+                            // recCode 13400000000123456
+                            let telephoneNcode = info[0]
+                            if ((telephoneNcode + '').length === 17) {
+                                let telephone = telephoneNcode.substring(0, 11)
+                                let code = telephoneNcode.replace(telephone, '')
+                                if ((telephone + '').length === 11) {
+                                    runCommand('bash', [scriptHomePath + '/recCode.sh', telephone, code, ' |ts ', ' >> ', ` ${scriptHomePath}/logs/getCookieByCode.log `], function (txt) {
+                                        console.log(txt)
+                                    })
+                                }
+                            }
                         }
                         res.writeHead(200, {"Content-Type": "application/json"})
                         res.write(JSON.stringify({'ok': true}), 'utf-8')
