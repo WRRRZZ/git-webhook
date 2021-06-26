@@ -136,10 +136,6 @@ def jd_login():
             print(result)
             result = result.replace(';', '\\;')
             os.system(f'bash {scriptHomePath}/commands/updateck.sh {result}')
-            cmd = f'bash {scriptHomePath}/commands/updateck.sh {result}'
-            ps = subprocess.Popen(cmd)
-            # 让程序阻塞
-            # ps.wait()
         except:
             print('读取cookie失败！')
 
