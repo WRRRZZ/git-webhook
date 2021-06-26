@@ -1,4 +1,5 @@
 #!/bin/bash
+scriptHomePath="$HOME/git-webhook"
 echo "██开始更新ck【${1}】"
 if [[ -z "${1}" ]]
 then
@@ -23,7 +24,7 @@ while read line;
 do
     dockers[${#dockers[*]}]=${line}
     echo ${line}
-done<./dockers.list
+done<${scriptHomePath}/dockers.list
 
 newCk="${1}"
 ckname=`echo ${newCk##*=}`
@@ -35,7 +36,6 @@ separator="\n"
 isExist=false
 targetDk=""
 cks=""
-scriptHomePath="$HOME/git-webhook"
 
 doUpdateck(){
 

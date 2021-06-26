@@ -58,11 +58,9 @@ def jd_login():
                 driver = webdriver.Chrome(options=chrome_options, executable_path=r'./chromedriver')
             driver.set_window_size(375, 812)
         except:
-            print(
-                '报错了!请检查你的环境是否安装谷歌Chrome浏览器！或者驱动【chromedriver.exe】版本是否和Chrome浏览器版本一致！\n驱动更新链接：http://npm.taobao.org/mirrors/chromedriver/')
+            print('报错了!请检查你的环境是否安装谷歌Chrome浏览器！或者驱动【chromedriver.exe】版本是否和Chrome浏览器版本一致！\n驱动更新链接：http://npm.taobao.org/mirrors/chromedriver/')
             exit(0)
 
-        url = "https://bean.m.jd.com/bean/signIndex.action"
         driver.get('https://bean.m.jd.com/bean/signIndex.action')
         print(f'输入手机号{telephone}')
 
@@ -78,68 +76,72 @@ def jd_login():
         count = 0
         preCode = readCodeForTelephone(telephone)
         while True:
-            if count >= 60:
+            if count >= 120:
                 exit(0)
             print('读取验证码')
             code = readCodeForTelephone(telephone)
             if preCode != code:
                 print('获取到验证码，输入')
-                WebDriverWait(driver, 600).until(EC.presence_of_element_located(
+                WebDriverWait(driver, 60).until(EC.presence_of_element_located(
                     (By.XPATH, "//input[@class='acc-input J_ping authcode']")
                 ), "输入验证码超时").send_keys(code)
                 print('点击登录按钮')
-                WebDriverWait(driver, 600).until(EC.presence_of_element_located(
+                WebDriverWait(driver, 60).until(EC.presence_of_element_located(
                     (By.XPATH, "//a[@class='btn J_ping btn-active']")
                 ), "点击登录超时").click()
                 break
             count += 1
             time.sleep(1)
 
-        print('判断是否登录成功')
+        time.sleep(2)
+        driver.get_screenshot_as_file(f"{telephone}.png")
+        print(f'截图')
+        # print('判断是否登录成功')
+        #
+        # try:
+        #     if WebDriverWait(driver, 120).until(EC.title_is(u"签到日历")):
+        #         '''判断title,返回布尔值'''
+        #         print('登录成功')
+        # except:
+        #     print('判断是否登录异常，退出')
+        #     exit(2)
+        #
+        # print('判断是否登录结束')
+
+        print('开始获取ck')
+        jd_cookies = driver.get_cookies()
+        print(jd_cookies)
         try:
-            if WebDriverWait(driver, 600, poll_frequency=0.2, ignored_exceptions=None).until(EC.title_is(u"签到日历")):
-                '''判断title,返回布尔值'''
-                print('登录成功')
+            with open('cookies_tmp.txt', 'w') as fp:
+                json.dump(jd_cookies, fp)
         except:
-            print('超时退出')
-            exit(2)
-
-
-def get_cookie():
-    print('开始获取ck')
-    jd_cookies = driver.get_cookies()
-    print(jd_cookies)
-    try:
-        with open('cookies_tmp.txt', 'w') as fp:
-            json.dump(jd_cookies, fp)
-    except:
-        print('保存cookie失败！')
-    driver.quit()
-    print('开始处理ck')
-    try:
-        with open('cookies_tmp.txt', 'r') as fp:
-            cookies = json.load(fp)
-            for cookie in cookies:
-                if cookie['name'] == "pt_key":
-                    pt_key = '{}={};'.format(cookie['name'], cookie['value'])
-                elif cookie['name'] == "pt_pin":
-                    pt_pin = '{}={};'.format(cookie['name'], cookie['value'])
-            try:
-                pt_key
-                pt_pin
-                result = pt_key + pt_pin
-            except:
-                pass
-        print('执行更新ck脚本')
-        print(result)
-        result = result.replace(';', '\\;')
-        os.system(f'bash {scriptHomePath}/commands/updateck.sh {result}')
-        cmd = f'bash {scriptHomePath}/commands/updateck.sh {result}'
-        ps = subprocess.Popen(cmd)
-        # 让程序阻塞
-        # ps.wait()
-    except:
-        print('读取cookie失败！')
+            print('保存cookie失败！')
+        driver.quit()
+        print('开始处理ck')
+        try:
+            with open('cookies_tmp.txt', 'r') as fp:
+                cookies = json.load(fp)
+                for cookie in cookies:
+                    if cookie['name'] == "pt_key":
+                        pt_key = '{}={};'.format(cookie['name'], cookie['value'])
+                    elif cookie['name'] == "pt_pin":
+                        pt_pin = '{}={};'.format(cookie['name'], cookie['value'])
+                try:
+                    pt_key
+                    pt_pin
+                    result = pt_key + pt_pin
+                except:
+                    pass
+            print('执行更新ck脚本')
+            print(result)
+            result = result.replace(';', '\\;')
+            os.system(f'bash {scriptHomePath}/commands/updateck.sh {result}')
+            cmd = f'bash {scriptHomePath}/commands/updateck.sh {result}'
+            ps = subprocess.Popen(cmd)
+            # 让程序阻塞
+            # ps.wait()
+        except:
+            print('读取cookie失败！')
 
 
 if __name__ == '__main__':
@@ -148,7 +150,6 @@ if __name__ == '__main__':
             print('未获取手机号，退出')
             exit(9)
         jd_login()
-        get_cookie()
     except:
         pass
     finally:
