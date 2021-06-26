@@ -112,14 +112,14 @@ def jd_login():
         jd_cookies = driver.get_cookies()
         print(jd_cookies)
         try:
-            with open('cookies_tmp.txt', 'w') as fp:
+            with open(f'cookies_tmp_{telephone}.txt', 'w') as fp:
                 json.dump(jd_cookies, fp)
         except:
             print('保存cookie失败！')
         driver.quit()
         print('开始处理ck')
         try:
-            with open('cookies_tmp.txt', 'r') as fp:
+            with open(f'cookies_tmp_{telephone}.txt', 'r') as fp:
                 cookies = json.load(fp)
                 for cookie in cookies:
                     if cookie['name'] == "pt_key":
@@ -135,7 +135,7 @@ def jd_login():
             print('执行更新ck脚本')
             print(result)
             result = result.replace(';', '\\;')
-            os.system(f'bash {scriptHomePath}/commands/updateck.sh {result}')
+            os.system(f'bash {scriptHomePath}/commands/updateck.sh {result} |ts >> {scriptHomePath}/logs/jdCookieUpdate.log')
         except:
             print('读取cookie失败！')
 
