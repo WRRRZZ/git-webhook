@@ -518,12 +518,18 @@ function qywxamNotify(text, desp) {
     const accIdxRE = /\d+/;
     let accIdx, userId;
     for (let i = 0; i < despTmp.length; i++) {
-      if (despTmp[i].match(accIdxRE)) {
-        accIdx = parseInt(despTmp[i].match(accIdxRE)[0]) - 1
+      if (despTmp[i].match(accIdxRE) && despTmp[i].indexOf('账号') > -1) {
+        accIdx = parseInt(despTmp[i].match(accIdxRE)[0])
         if (userIdsTmp.length === 1) {
           accIdx = 0;
         }
-        userId = userIdsTmp[accIdx];
+        try {
+          userId = userIdsTmp[accIdx]
+        } catch (e) {
+          // 数组越界，说明消息内容含有数字，并没有具体账号，所以直接通知所有人
+          qywxSplitSend(text, despTmp[i], userIdsTmp[0]);
+          continue;
+        }
         if (typeof userId == "undefined") {
           qywxSplitSend(text, despTmp[i], userIdsTmp[0]);
         } else if (userId === "@N") {
