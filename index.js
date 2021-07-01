@@ -7,6 +7,7 @@ var spawn = require('child_process').spawn
 // git用
 // secret 保持和 GitHub 后台设置的一致
 var createHandler = require('git-webhook-handler')
+var cgit = require('./common/common-git')
 var handler = createHandler({path: '/webhook', secret: config.secret})
 const webHookPort = config["web-hook-port"] > 0 ? config["web-hook-port"] : 6666
 // 码云用
@@ -45,12 +46,16 @@ handler.on('push', function (event) {
     console.log('Received a push event for %s to %s',
         event.payload.repository.name,
         event.payload.ref)
+    let isExec = true
     if (event.payload.repository.name === 'jd_scripts' && event.payload.ref.indexOf('master') > 0) {
         let diff = ""
         let diffSet = new Set()
         if (event.payload.hasOwnProperty("commits")) {
             if (!!event.payload.commits) {
                 event.payload.commits.forEach((commit) => {
+                    if (isExec) {
+                        isExec = cgit.isExec(commit)
+                    }
                     if (commit.hasOwnProperty("modified") && !!commit.modified) {
                         commit.modified.forEach((filePath) => {
                             diffSet.add(filePath.indexOf("/") > -1 ? filePath.split("/")[filePath.split("/").length - 1] : filePath)
@@ -69,10 +74,12 @@ handler.on('push', function (event) {
                 })
             }
         }
-        diff = getDiffStr(diffSet, diff)
-        runCommand('bash', [scriptHomePath + '/deploy.sh', 'all', diff, ' |ts ', ' >> ', ` ${scriptHomePath}/logs/deploy.log `], function (txt) {
-            console.log(txt)
-        })
+        if (isExec) {
+            diff = getDiffStr(diffSet, diff)
+            runCommand('bash', [scriptHomePath + '/deploy.sh', 'all', diff, ' |ts ', ' >> ', ` ${scriptHomePath}/logs/deploy.log `], function (txt) {
+                console.log(txt)
+            })
+        }
     }
     if (event.payload.repository.name === 'git-webhook' && event.payload.ref.indexOf('master') > 0) {
         let diff = ""
@@ -81,6 +88,9 @@ handler.on('push', function (event) {
         if (event.payload.hasOwnProperty("commits")) {
             if (!!event.payload.commits) {
                 event.payload.commits.forEach((commit) => {
+                    if (isExec) {
+                        isExec = cgit.isExec(commit)
+                    }
                     if (commit.hasOwnProperty("modified") && !!commit.modified) {
                         commit.modified.forEach((filePath) => {
                             if (filePath.indexOf("jd_task.sh") > -1) {
@@ -92,7 +102,7 @@ handler.on('push', function (event) {
                 })
             }
         }
-        if (isDeploy) {
+        if (isDeploy && isExec) {
             diff = getDiffStr(diffSet, diff)
             runCommand('bash', [scriptHomePath + '/deploy.sh', 'all', diff, ' |ts ', ' >> ', ` ${scriptHomePath}/logs/deploy.log `], function (txt) {
                 console.log(txt)
