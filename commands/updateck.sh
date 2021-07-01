@@ -34,24 +34,23 @@ newckarr=()
 newcks=""
 separator="\n"
 isExist=false
-targetDk=""
+targetDk="jd99"
 cks=""
 
+for dk in ${dockers[@]};
+do
+    cks=$(cat ${scriptHomePath}/cookies.list.${dk})
+    #cks="pt_key=AAJgiMANADCU3PndQJ9jqi7zRy6ydrR7_1SfUTCjsnZ8U7cLl7y48-gbvZib9_nHowe7a9x9z-Q;pt_pin=flyinghhf&pt_key=AAJglLlaADDFHjsj0zNoThZ6bJR3yGzv-N4G7Tw0UMehP863z8cAtMhnvgOsNTK4RERrO6hd6ug;pt_pin=jd_646a33519f4bb;"
+
+    #判断ck在哪个容器
+    if [[ ${cks} == *${ckname}* ]]
+    then
+        echo "██ck在【${dk}】容器"
+        targetDk=${dk}
+    fi
+done
+
 doUpdateck(){
-
-    for dk in ${dockers[@]};
-    do
-        cks=$(cat ${scriptHomePath}/cookies.list.${dk})
-        #cks="pt_key=AAJgiMANADCU3PndQJ9jqi7zRy6ydrR7_1SfUTCjsnZ8U7cLl7y48-gbvZib9_nHowe7a9x9z-Q;pt_pin=flyinghhf&pt_key=AAJglLlaADDFHjsj0zNoThZ6bJR3yGzv-N4G7Tw0UMehP863z8cAtMhnvgOsNTK4RERrO6hd6ug;pt_pin=jd_646a33519f4bb;"
-
-        #判断ck在哪个容器
-        if [[ ${cks} == *${ckname}* ]]
-        then
-            echo "██ck在【${dk}】容器"
-            targetDk=${dk}
-        fi
-    done
-
     if [[ -n "$targetDk" ]]
     then
         isExist=true
@@ -120,7 +119,7 @@ doUpdateck(){
 
 }
 
-LOCK_NAME="${scriptHomePath}/updateck.lock"
+LOCK_NAME="${scriptHomePath}/updateck-${targetDk}.lock"
 if ( set -o noclobber; echo "$$" > "$LOCK_NAME") 2> /dev/null;
 then
     trap 'rm -f "$LOCK_NAME"; exit $?' INT TERM EXIT

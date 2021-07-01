@@ -45,7 +45,7 @@ doExecScript(){
 }
 
 
-LOCK_NAME="./exec.lock"
+LOCK_NAME="./exec-${dk}.lock"
 if ( set -o noclobber; echo "$$" > "$LOCK_NAME") 2> /dev/null;
 then
     trap 'rm -f "$LOCK_NAME"; exit $?' INT TERM EXIT

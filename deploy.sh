@@ -100,7 +100,7 @@ copyFile2Container(){
     done
 }
 
-LOCK_NAME="./deploy.lock"
+LOCK_NAME="./deploy-${targetDk}.lock"
 if ( set -o noclobber; echo "$$" > "$LOCK_NAME") 2> /dev/null;
 then
     trap 'rm -f "$LOCK_NAME"; exit $?' INT TERM EXIT
