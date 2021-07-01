@@ -1,6 +1,7 @@
 #!/bin/bash
 # 初始化配置
 scriptHomePath="$HOME/git-webhook"
+zjdHomePath="/home/lowking/JDOpenCard"
 declare -A dockers
 while read line;
 do
@@ -8,11 +9,15 @@ do
     echo ${line}
 done<${scriptHomePath}/task/zjddockers.list
 # 获取需要助力的pin
-declare -A pins
-while read line;
+pins=""
+while read pin;
 do
-    pins[${#pins[*]}]=${line}
-    echo ${line}
+    if [[ -z ${pins} ]]
+    then
+        pins=${pin}
+    else
+        pins="${pins},${pin}"
+    fi
 done<${scriptHomePath}/task/zjdpins.list
 # 获取贡献助力的ck
 cks=""
@@ -20,7 +25,7 @@ for dk in ${dockers[@]};
 do
     while read ck;
     do
-        if [[ -z cks ]]
+        if [[ -z ${cks} ]]
         then
             cks=${ck}
         else
@@ -30,3 +35,4 @@ do
 done
 # 调用脚本执行
 echo -e "\n██获取到的ck：${cks}\n██助力给：${pins}"
+export JD_COOKIE=${cks} && export zlzh=${pins} && nohup python3 -u ${zjdHomePath}/zjd.sh |ts >> ${scriptHomePath}/logs/zjd.log 2>&1&
