@@ -48,3 +48,10 @@ tmp
 cookies.list.*
 dockers.list
 config
+task/follow.pre.txt
+task/follow.txt
+task/shopid.pre.txt
+task/shopid.txt
+task/zjddockers.list
+task/zjdpins.list
+updateoc.sh
