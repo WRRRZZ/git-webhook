@@ -1,1 +1,1 @@
-pm2 stop $1
+pm2 delete $1
