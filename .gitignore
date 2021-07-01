@@ -41,3 +41,10 @@ lk*.boxjs.json
 github.json
 .wakatime-project
 test/*
+utils/*.png
+utils/*tmp*
+utils/chromedriver*
+tmp
+cookies.list.*
+dockers.list
+config
