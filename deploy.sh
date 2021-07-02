@@ -67,7 +67,7 @@ doContainerUpdate(){
             if [[ ${targetDk} == ${dk} ]]
             then
                 (
-                    docker exec -t ${dk} /bin/sh -c "/usr/local/bin/docker_entrypoint.sh |ts >> /scripts/logs/default_task.log 2>&1"
+                    docker exec -t ${dk} /bin/sh -c "ssh-keyscan gogs.mynetgear.com > /root/.ssh/known_hosts && /usr/local/bin/docker_entrypoint.sh |ts >> /scripts/logs/default_task.log 2>&1"
 
                     if [[ "${enable_notify}" == "0" ]]
                     then
