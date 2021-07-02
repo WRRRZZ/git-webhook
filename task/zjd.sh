@@ -34,5 +34,5 @@ do
     done<${scriptHomePath}/cookies.list.${dk}
 done
 # 调用脚本执行
-echo -e "\n██获取到的ck：${cks}\n██助力给：${pins}"
+echo -e "\n██获取到的ck：${cks}\n██助力给：${pins}" |ts >> ${scriptHomePath}/logs/zjd.log 2>&1&
 export JD_COOKIE=${cks} && export zlzh=${pins} && nohup python3 -u ${zjdHomePath}/jd_zjd.py |ts >> ${scriptHomePath}/logs/zjd.log 2>&1&
