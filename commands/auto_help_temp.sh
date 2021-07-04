@@ -46,8 +46,9 @@ exportSharecode() {
         singleSharecode=$(sed -n '/'${1}'.*/'p ${logFile} | awk '$3 ~ /'${pin}'/{print $4}' | awk '{T=T"@"$1} END {print T}' | awk '{print substr($1,2)}')
         echo ${singleSharecode}
         #        | awk '{print $2,$4}' | sort -g | uniq
-        if [[ -n ${singleSharecode} ]]
+        if [[ ! x"$singleSharecode" = x ]]
         then
+            echo "aaa"
             allSharecode=${allSharecode}"&"${singleSharecode}
         fi
     done</scripts/logs/zlpins.list
