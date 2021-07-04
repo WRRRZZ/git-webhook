@@ -7,11 +7,6 @@ logDir="/scripts/logs"
 # 处理后的log文件
 logFile=${logDir}/sharecodeCollection.log
 containerCookieList="$COOKIES_LIST.$CNAME"
-declare -A zlpins
-while read line;
-do
-    zlpins[${#zlpins[*]}]=${line}
-done</scripts/logs/zlpins.list
 
 if [ -n "$1" ]; then
   parameter=${1}
@@ -45,20 +40,23 @@ exportSharecode() {
     echo "cookie个数：${cookiecount}"
 
     # 单个账号助力码，并且支持从配置读取指定人的助力码
-    for pin in ${zlpins[@]};
+    while read pin;
     do
         echo -e "\n██"${pin}
         singleSharecode=$(sed -n '/'${1}'.*/'p ${logFile} | awk '$3 ~ /'${pin}'/{print $4}' | awk '{T=T"@"$1} END {print T}' | awk '{print substr($1,2)}')
         echo ${singleSharecode}
         #        | awk '{print $2,$4}' | sort -g | uniq
-        allSharecode=${allSharecode}"&"${singleSharecode}
-    done
+        if [[ -n ${singleSharecode} ]]
+        then
+            allSharecode=${allSharecode}"&"${singleSharecode}
+        fi
+    done</scripts/logs/zlpins.list
 
     allSharecode=$(echo ${allSharecode} | awk '{print substr($1,2)}')
 
     #判断合成的助力码长度是否大于账号数，不大于，则可知没有助力码
     if [ ${#allSharecode} -gt ${#zlpins[*]} ]; then
-      echo "${1}：导出助力码"
+      echo "${1}：导出助力码：${3}"
       export ${3}=${allSharecode}
       echo -e ${3}"的助力码：\n"${allSharecode}
     else
@@ -84,6 +82,3 @@ autoHelp() {
     exportSharecode ${1} ${2} ${3}
   fi
 }
-
-autoHelp "京喜财富岛好友互助码" "${logDir}/jd_cfd.log" "JDCFD_SHARECODES"
-autoHelp "东东健康社区好友互助码" "${logDir}/jd_health.log" "JDHEALTH_SHARECODES"
