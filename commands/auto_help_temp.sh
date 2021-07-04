@@ -31,6 +31,7 @@ collectSharecode() {
 # 导出助力码
 exportSharecode() {
   allSharecode=""
+  singleSharecode=""
   if [ -f ${logFile} ]; then
     #账号数
     cookiecount=$(echo ${JD_COOKIE} | grep -o pt_key | grep -c pt_key)
@@ -52,6 +53,7 @@ exportSharecode() {
             singleSharecode=${singleSharecode}"@"${t}
         fi
     done</scripts/logs/zlpins.list
+    singleSharecode=$(echo ${singleSharecode} | awk '{print substr($1,2)}')
 
     # 拼接多个账号助力码
     num=1
