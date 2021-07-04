@@ -43,13 +43,13 @@ exportSharecode() {
     while read pin;
     do
         echo -e "\n██"${pin}
-        singleSharecode=$(sed -n '/'${1}'.*/'p ${logFile} | awk '$3 ~ /'${pin}'/{print $4}' | awk '{T=T"@"$1} END {print T}' | awk '{print substr($1,2)}')
-        echo ${singleSharecode}
+        t=$(sed -n '/'${1}'.*/'p ${logFile} | awk '$3 ~ /'${pin}'/{print $4}' | awk '{T=T"@"$1} END {print T}' | awk '{print substr($1,2)}')
+        echo ${t}
         #        | awk '{print $2,$4}' | sort -g | uniq
-        if [[ ! x"$singleSharecode" = x ]]
+        if [[ ! x"$t" = x ]]
         then
             echo "aaa"
-            singleSharecode=${singleSharecode}"@"${singleSharecode}
+            singleSharecode=${singleSharecode}"@"${t}
         fi
     done</scripts/logs/zlpins.list
 
