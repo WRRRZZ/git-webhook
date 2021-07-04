@@ -49,9 +49,19 @@ exportSharecode() {
         if [[ ! x"$singleSharecode" = x ]]
         then
             echo "aaa"
-            allSharecode=${allSharecode}"&"${singleSharecode}
+            singleSharecode=${singleSharecode}"@"${singleSharecode}
         fi
     done</scripts/logs/zlpins.list
+
+    # 拼接多个账号助力码
+    num=1
+    if [[ ! x"$singleSharecode" = x ]]
+    then
+        while [ ${num} -le ${cookiecount} ]; do
+          local allSharecode=${allSharecode}"&"${singleSharecode}
+          num=$(expr $num + 1)
+        done
+    fi
 
     allSharecode=$(echo ${allSharecode} | awk '{print substr($1,2)}')
 
