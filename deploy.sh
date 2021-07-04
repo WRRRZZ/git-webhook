@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 operation=$1
 enable_notify=$2
 OPERA_RESTART="restart"

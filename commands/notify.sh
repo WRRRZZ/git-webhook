@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 scriptHomePath="$HOME/git-webhook"
 targetDk=${1}
 title=${2}

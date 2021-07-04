@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 scriptHomePath="$HOME/git-webhook"
 telephone=$1
 echo "██开始发送验证码获取ck【${telephone}】"

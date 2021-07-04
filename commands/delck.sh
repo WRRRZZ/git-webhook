@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 echo "██开始删除ck【${1}】"
 if [[ -z "${1}" ]]
 then

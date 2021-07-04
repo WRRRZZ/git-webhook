@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 scriptHomePath="$HOME/git-webhook"
 echo "██开始更新ck【${1}】"
 if [[ -z "${1}" ]]

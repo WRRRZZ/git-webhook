@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 scriptHomePath="$HOME/git-webhook"
 f1=${scriptHomePath}/task/follow.txt
 f2=${scriptHomePath}/task/follow.pre.txt

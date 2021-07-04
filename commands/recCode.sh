@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 scriptHomePath="$HOME/git-webhook"
 telephone=$1
 code=$2
