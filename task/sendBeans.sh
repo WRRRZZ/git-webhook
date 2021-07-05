@@ -12,7 +12,7 @@ pins=""
 while read dk;
 do
     # 获取容器第一个ck
-    pin=$(sed -n '1,1p' cookies.list.${dk})
+    pin=$(sed -n '1,1p' ${scriptHomePath}/cookies.list.${dk})
     if [[ -z ${pins} ]]
     then
         pins=${pin}
