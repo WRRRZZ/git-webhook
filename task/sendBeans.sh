@@ -36,5 +36,5 @@ do
 done
 cks="${pins}&${cks}"
 # 调用脚本执行
-echo -e "\n██获取到的ck：${cks}\n██助力给：${pins}" |ts >> ${scriptHomePath}/logs/zjd.log 2>&1&
+echo -e "\n██获取到的ck：${cks}\n██助力给：${pins}" |ts >> ${scriptHomePath}/logs/sendbean.log 2>&1&
 export JD_COOKIE=${cks} && nohup node ${scriptHomePath}/task/jd_sendBeans.js |ts >> ${scriptHomePath}/logs/sendbean.log 2>&1&
