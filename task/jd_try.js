@@ -441,7 +441,7 @@ async function getSuccessList() {
 }
 
 async function showMsg() {
-  let message = `京东账号${$.index} ${$.nickName || $.UserName}\n🎉 本次申请：${$.totalTry}/${$.totalGoods}个商品🛒\n${ $.successList.length>0 ? "🎁您有试用商品待领取🎁" : ""}\n${ $.waitTryList.length > 0 ? "\n待领试用：\n" + $.waitTryList.join("\n\n") + "\n" : "" }\n${$.pastTryList.length > 0 ? "\n往期试用：\n" + $.pastTryList.join("\n\n") + "\n" : ""}\n🎉 结束原因：${$.stopMsg}`;
+  let message = `京东账号${$.index} ${$.nickName || $.UserName}\n🎉 本次申请：${$.totalTry}/${$.totalGoods}个商品🛒${ $.successList.length>0 ? "\n🎁您有试用商品待领取🎁" : ""}${ $.waitTryList.length > 0 ? "\n待领试用：\n" + $.waitTryList.join("\n") : "" }${$.pastTryList.length > 0 ? "\n往期试用：\n" + $.pastTryList.join("\n") : ""}\n🎉 结束原因：${$.stopMsg}`;
 
   if (!args.jdNotify || args.jdNotify === 'false') {
     $.msg($.name, ``, message, {
