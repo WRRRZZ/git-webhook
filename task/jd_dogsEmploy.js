@@ -122,7 +122,7 @@ function getRequest(body) {
 
 function requireConfig() {
   return new Promise(resolve => {
-    notify = $.isNode() ? require('../sendNotify') : '';
+    notify = $.isNode() ? require('../send_notify') : '';
     const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
     if ($.isNode()) {
       Object.keys(jdCookieNode).forEach((item) => {
