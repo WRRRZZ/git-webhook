@@ -19,14 +19,14 @@ if ($.isNode()) {
     $.getdata("CookieJD2"),
     ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
 }
-$.activityId = 85;
+$.activityId = 1595;
 !(async () => {
   $.isLoginInfo = {};
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-  let openCount = Math.floor((Number(cookiesArr.length)-1)/10);
+  let openCount = Math.floor((Number(cookiesArr.length)-1)/5);
   console.log(`\n共有${cookiesArr.length}个账号，前${openCount}个账号可以开团\n`);
   $.openTuanList = [];
   console.log(`前${openCount}个账号开始开团\n`);
